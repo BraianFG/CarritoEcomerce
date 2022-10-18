@@ -2,6 +2,11 @@ let lista = [];
 let acumulador = 0;
 let ver = JSON.parse(localStorage.getItem('CARRITO'));
 let acumula = JSON.parse(localStorage.getItem('TOTAL'));
+let productos = {};
+let productosCantidad = {};
+let cantidad = 1;
+let unicos,conjunto;
+let subtotal = 1;
 /*-----------------------------------------------------------------------*/
 //Petición get
 /*-----------------------------------------------------------------------*/
@@ -22,7 +27,7 @@ recibir();
 const iterar = async (itera) => {
   document.querySelector("#articulos").innerHTML +=
     `<div class="card" id="${itera.id}" >
-        <a href="#" data-bs-toggle="modal" data-bs-target="#abrir_${itera.id}"><img src="./assets/images/${itera.imagen}" class="card-img-top" alt="./assets/images/${itera.imagen}"></a>
+        <img src="./assets/images/${itera.imagen}" class="card-img-top" alt="./assets/images/${itera.imagen}">
         <div class="card-body">
         <div class="card-texto">
           <h4 class="card-title nombre">${itera.nombre}</h4>
@@ -32,56 +37,24 @@ const iterar = async (itera) => {
             <button class="button cargar" data-id="${itera.id}" data-nombre="${itera.nombre}" data-precio="${itera.precio}">Agregar <i class="fa-solid fa-plus"></i> </button>
         </div>
         </div> 
-        
-        <div class="modal fade" tabindex="-1" id="abrir_${itera.id}">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 id="nombre" class="modal-title">${itera.nombre}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            <div id="carouselExampleIndicators_${itera.id}" class="carousel slide" data-bs-ride="true">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators_${itera.id}" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators_${itera.id}" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators_${itera.id}" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                    <img src="./assets/images/${itera.imagen}" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                    <img src="./assets/images/${itera.imagen01}" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                    <img src="./assets/images/${itera.imagen02}" class="d-block w-100" alt="...">
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-dark"  data-bs-slide="next" data-bs-target="#carouselExampleIndicators_${itera.id}">Siguiente</button>
-              <button type="button" class="btn btn-dark" data-bs-target="#carouselExampleIndicators_${itera.id}" data-bs-slide="prev">Volver</button>
-            </div>
-          </div>
-        </div>
       </div>`;
 }
 
-/*------------------------------------------------------------------------------------*/
-
+/*-----------------------------------------------------------------------*/
+//Lógica del carrito
+/*-----------------------------------------------------------------------*/
 //Carga temporal del localStorage
 const cargarTemp = async () => {
   seleccionar = document.querySelectorAll(".cargar");
   for (let i = 0; i < seleccionar.length; i++) {
     seleccionar[i].addEventListener("click", () => {
       objetoProducto(i);
-      document.querySelector("#total").innerHTML = `TOTAL : $${acumulador}</p>`;
-      alertify.notify('Producto agregado al carrito','success',10);
-      lista.push(productos);
-      mostrarBotones();
+      totalTemp();
+      sumarCantidad();
       almacenar();
+      document.querySelector("#total").innerHTML = `TOTAL : $${acumulador}</p>`;
+      alertify.notify('Producto agregado al carrito', 'success', 10);
+      mostrarBotones();
       OcultarMensaje();
       CarritoContenido();
     })
@@ -89,28 +62,53 @@ const cargarTemp = async () => {
 }
 
 //Lista de producto temporal
-const objetoProducto = async (i) =>{
+const objetoProducto = async (i) => {
   productos = {
     id: JSON.parse(seleccionar[i].dataset.id),
     nombre: seleccionar[i].dataset.nombre,
     precio: JSON.parse(seleccionar[i].dataset.precio),
     cantidad: 1,
+    subtotal:subtotal,
   };
-  document.querySelector("#carrito").innerHTML += `<p>${productos.id}.${productos.nombre} $${productos.precio}</p>`; 
-  acumulador = acumulador + productos.precio;
+  cargarProductos(productos);
+}
+
+//Genera el array de objeto
+const cargarProductos = async (productos) => {
+  lista.push(productos);
+}
+
+//Suma cantidad por artículo
+const sumarCantidad= async () => {
+  if (productosCantidad.hasOwnProperty(productos.nombre)) {
+    productos.cantidad = productosCantidad[productos.nombre].cantidad + 1;
+  }
+  productosCantidad[productos.nombre] = productos;
 }
 
 //Carga productos al localstorage
-const almacenar = async () =>{
-  localStorage.setItem("CARRITO", JSON.stringify(lista));
-  localStorage.setItem("TOTAL", JSON.stringify(acumulador));
+const almacenar = async () => {
+  for (let z of lista) {
+    z.subtotal = z.cantidad * z.precio;
+    document.querySelector("#carrito").innerHTML += `<p>${z.id}.${z.nombre} $${z.precio} x ${z.cantidad} $${z.subtotal}</p>`
+    localStorage.setItem("CARRITO", JSON.stringify(lista));
+  }
 }
 
+//Calcula el total temporal
+const totalTemp = async () => {
+  for (let n of lista) {
+    acumulador = acumulador + n.precio;
+    document.querySelector("#total").innerHTML = `TOTAL : $${acumulador}</p>`;
+    localStorage.setItem("TOTAL", JSON.stringify(acumulador));
+  }
+
+}
 
 //Calcula el total
 const total = async () => {
-  for (let i of ver) {
-    acumulador = acumulador + i.precio;
+  for (let m of ver) {
+    acumulador = acumulador + m.precio;
     document.querySelector("#total").innerHTML = `TOTAL : $${acumulador}</p>`;
   }
 }
@@ -118,7 +116,8 @@ const total = async () => {
 //Levanta localStorage
 const levantarGurdado = async () => {
   ver.forEach(x => {
-    document.querySelector("#carrito").innerHTML += `<p>  ${x.id}. ${x.nombre} $${x.precio}</p>`;
+    x.subtotal = x.cantidad * x.precio;
+    document.querySelector("#carrito").innerHTML += `<p>  ${x.id}. ${x.nombre} $${x.precio} x ${x.cantidad} $${x.subtotal}</p>`;
   });
 }
 
@@ -133,14 +132,14 @@ const OcultarMensaje = async () => {
   document.querySelector("#mensaje").innerHTML = ``;
 }
 //Muestra mensaje de carrito vacio
-const mostrarMensaje = async () =>{
+const mostrarMensaje = async () => {
   document.querySelector("#mensaje").innerHTML = `El carrito está vacio,agregue un producto`;
 }
 
 //En caso que el carrito quede con productos
-const CarritoContenido = async () =>{
-  document.querySelector(".fa-cart-shopping").style.color="red";
-} 
+const CarritoContenido = async () => {
+  document.querySelector(".fa-cart-shopping").style.color = "red";
+}
 
 //Mostrar Carrito con localStorage
 const mostrar = async () => {
@@ -149,7 +148,7 @@ const mostrar = async () => {
     levantarGurdado();
     total();
     OcultarMensaje();
-  }else{
+  } else {
     OcultarBotones();
     mostrarMensaje();
   }
@@ -163,17 +162,21 @@ const mostrarBotones = async () => {
 }
 
 /*------------------------------------------------------------------------------------*/
-
-//Si el usuario elimina
-document.querySelector("#eliminar").addEventListener("click", () => {
+//Instrucciones al eliminar
+const eliminarCarrito = async () => {
   localStorage.clear();
   lista = [];
   acumulador = 0;
-  alertify.notify('carrito eliminado', 'success', 5);
-  document.querySelector(".fa-cart-shopping").style.color="black";
+  document.querySelector(".fa-cart-shopping").style.color = "black";
+  OcultarBotones();
   OcultarContenido();
   mostrarMensaje();
-  mostrar();
+}
+
+//Si el usuario elimina
+document.querySelector("#eliminar").addEventListener("click", () => {
+  alertify.notify('carrito eliminado', 'success', 5);
+  eliminarCarrito();
 });
 
 //Ocultar botones
@@ -185,40 +188,54 @@ const OcultarContenido = async () => {
 /*-------------------------------------------------------------------------*/
 //Checkout
 /*-------------------------------------------------------------------------*/
+
+//Vista de resumen de compra
 const mostrarModal = async () => {
   ver.forEach(a => {
     document.querySelector("#VerProductos").innerHTML += `<p>  ${a.id}. ${a.nombre} $${a.precio}</p>`;
   });
+  document.querySelector("#totalResumenTemp").innerHTML = `TOTAL : $${acumulador}</p>`;
+}
+
+//Vista de resumen temporal de compra
+const mostrarModalTemp = async () => {
+  for (let y of lista) {
+    document.querySelector("#VerProductosTemp").innerHTML += `<p>  ${y.id}. ${y.nombre} $${y.precio}</p>`;
+  }
+  document.querySelector("#totalResumenTemp").innerHTML = `TOTAL : $${acumulador}</p>`;
 }
 
 document.querySelector("#confirmar").addEventListener("click", () => {
-    document.querySelector("#confirmar").innerHTML = `
+  document.querySelector("#confirmar").innerHTML = `
     <div class="modal fade" id="checkout" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Resumen</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="VerProductos">
+        <div class="modal-body">
+        <div class="container" id="VerProductosTemp">
+        </div>  
           <div class="container" id="VerProductos">
-              ${mostrarModal()}
           </div>    
             </div>
-            <h3 class="container">TOTAL : $${acumula} </h3>
+            <h3 class="container" id="totalResumenTemp"></h3>
+            <h3 class="container" id="totalResumen"></h3>
           <div class="modal-footer">
-            <button type="button" class="btn btn-dark" id="pagar">Pagar</button>
-            ${pago()}
+            <button type="button" class="btn btn-dark" id="finalizar"  data-bs-dismiss="modal" >Pagar</button>
           </div> 
         </div> 
     </div> 
     </div> `;
+
+  document.querySelector("#finalizar").addEventListener("click", () => {
+    alertify.notify('Gracias por la compra', 'success', 10)
+    eliminarCarrito();
+  })
+
+  mostrarModalTemp();
+  mostrarModal();
 });
 
-const pago = async () => {
-  document.querySelector("#pagar").addEventListener("click", () => {
-    ver.forEach(x => {
-      location.href = `https://api.whatsapp.com/send?phone=5492346338767&text=Hola,este%20es%20mi%20pedido%20${x.id}.${x.nombre}%20${x.precio}`;
-    });
-  });
-}
+
