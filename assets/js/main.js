@@ -192,7 +192,8 @@ const OcultarContenido = async () => {
 //Vista de resumen de compra
 const mostrarModal = async () => {
   ver.forEach(a => {
-    document.querySelector("#VerProductos").innerHTML += `<p>  ${a.id}. ${a.nombre} $${a.precio}</p>`;
+    a.subtotal = a.cantidad * a.precio;
+    document.querySelector("#VerProductos").innerHTML += `<p>  ${a.id}. ${a.nombre} $${a.precio} x ${a.cantidad} $${a.subtotal}</p>`;
   });
   document.querySelector("#totalResumenTemp").innerHTML = `TOTAL : $${acumulador}</p>`;
 }
@@ -200,7 +201,8 @@ const mostrarModal = async () => {
 //Vista de resumen temporal de compra
 const mostrarModalTemp = async () => {
   for (let y of lista) {
-    document.querySelector("#VerProductosTemp").innerHTML += `<p>  ${y.id}. ${y.nombre} $${y.precio}</p>`;
+    y.subtotal = y.cantidad * y.precio;
+    document.querySelector("#VerProductosTemp").innerHTML += `<p>  ${y.id}. ${y.nombre} $${y.precio} x ${y.cantidad} $${y.subtotal}</p>`;
   }
   document.querySelector("#totalResumenTemp").innerHTML = `TOTAL : $${acumulador}</p>`;
 }
@@ -237,5 +239,4 @@ document.querySelector("#confirmar").addEventListener("click", () => {
   mostrarModalTemp();
   mostrarModal();
 });
-
 
