@@ -96,6 +96,11 @@
     text-transform: uppercase;
 }
 
+.btn-dark{
+    text-transform: uppercase;
+    background-color: #281908;
+}
+
 .button-secundario {
     background-color: #f4f4f4;
     color: #281908;

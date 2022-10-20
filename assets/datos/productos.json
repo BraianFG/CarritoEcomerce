@@ -1,42 +1,42 @@
 [
     [
         {
-            "id": "1",
+            "id": 1,
             "nombre": "Jean Cartier Lisas  ",
             "descripcion": "Talles únicos,ideales para el trabajo,precio por par.",
             "precio": "320",
             "imagen": "j.jpg"
         },
         {
-            "id": "2",
+            "id": 2,
             "nombre": "Camisas de vestir ",
             "descripcion": "Camisas mangas largas,talles S al XXL.\r\n",
             "precio": "4700",
             "imagen": "Camisas1.jpg"
         },
         {
-            "id": "3",
+            "id": 3,
             "nombre": "Medias Rombos",
             "descripcion": "Talles unicos,precio por par.",
             "precio": "500",
             "imagen": "IMG_20220630_134537.jpg"
         },
         {
-            "id": "4",
+            "id": 4,
             "nombre": "Bombacha de campo",
             "descripcion": "Bombahcha de campo lisas,talle 38  al 52",
             "precio": "3500",
             "imagen": "IMG_20220720_161625.jpg"
         },
         {
-            "id": "5",
+            "id": 5,
             "nombre": "Broches para colgar ropa",
             "descripcion": "Precio por docena ",
             "precio": "300",
             "imagen": "IMG_20220622_115214.jpg"
         },
         {
-            "id": "6",
+            "id": 6,
             "nombre": "Gorras ",
             "descripcion": "Gorras,talles unicos ajustables a la circunferencia de la cabeza.",
             "precio": "1600",

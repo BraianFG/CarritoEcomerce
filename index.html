@@ -30,7 +30,7 @@
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
   <!--JS local -->
-  <script src="./assets/js/main.js" defer></script>
+  <script src="./assets/js/main.js" defer type="module"></script>
 
   <!--Font Awesome-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
@@ -84,11 +84,33 @@
       </div>
     </nav>
   </header>
+
   <main class="main">
     <div id="articulos" class="container">
 
     </div>
   </main>
+
+  <!--MODAL DE CONFIRMAR-->
+  <div class="modal fade" id="checkout" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Resumen</h1>
+          <button type="button" class="fa-solid fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container" id="VerProductos">
+          </div>    
+            </div>
+            <h3 class="container" id="totalResumen"></h3>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" id="finalizar"  data-bs-dismiss="modal" >Pagar</button>
+          </div> 
+        </div> 
+    </div> 
+    </div>
+
   <footer class="footer">
 
   </footer>
