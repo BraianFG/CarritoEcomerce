@@ -37,8 +37,8 @@
     height: 4em;
 }
 
-.icon-cart{
-   padding: 0.4em
+.icon-cart {
+    padding: 0.4em
 }
 
 #articulos {
@@ -96,7 +96,7 @@
     text-transform: uppercase;
 }
 
-.btn-dark{
+.btn-dark {
     text-transform: uppercase;
     background-color: #281908;
 }
@@ -122,6 +122,30 @@
 
 .footer {
     background-color: #fefefe;
-    height: 8em;
+    height: 5em;
     border-top: 0.2em solid #281908;
+    padding: 0.5em;
+}
+
+.lista{
+    display: flex;
+    align-items: center;
+}
+.lista__item {
+    color: #000;
+    margin: 0.3em;
+}
+
+.lista__item:hover{
+    color: #000;
+}
+
+.texto__footer{
+    color: #281908;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.texto__footer:hover{
+    color: #281908
 }

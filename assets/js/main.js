@@ -29,7 +29,7 @@ const iterar = (itera) => {
         <img src="./assets/images/${itera.imagen}" class="card-img-top" alt="./assets/images/${itera.imagen}">
         <div class="card-body">
         <div class="card-texto">
-          <h4 class="card-title nombre">${itera.nombre}</h4>
+          <h4 class="card-title nombre">${itera.id}. ${itera.nombre}</h4>
           <h5  class="card-title">$<p id="precio">${itera.precio}<p></h5>
           <p class="card-text">${itera.descripcion}</p>
         </div> 
