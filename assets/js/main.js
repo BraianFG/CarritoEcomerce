@@ -157,7 +157,7 @@ validarAlmacenamiento();
 //Checkout
 /*-------------------------------------------------------------------------*/
 document.querySelector("#finalizar").addEventListener("click", () => {
-  alertify.notify('Gracias por la compra', 'success', 10)
+  alertify.notify('Gracias por su compra', 'success', 10)
   eliminarCarrito();
 })
 
